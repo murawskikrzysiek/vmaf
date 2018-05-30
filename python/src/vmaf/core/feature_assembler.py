@@ -86,7 +86,7 @@ class FeatureAssembler(object):
 
         # assemble an output dict with demanded atom features
         # atom_features_dict = self.fextractor_atom_features_dict
-        result_dicts = map(lambda x: dict(), self.assets)
+        result_dicts = [dict() for x in self.assets]
         for fextractor_type in self.feature_dict:
             assert fextractor_type in self.type2results_dict
             for atom_feature in self._get_atom_features(fextractor_type):
@@ -94,10 +94,7 @@ class FeatureAssembler(object):
                 for result_index, result in enumerate(self.type2results_dict[fextractor_type]):
                     result_dicts[result_index][scores_key] = result[scores_key]
 
-        self.results = map(
-            lambda (asset, result_dict): BasicResult(asset, result_dict),
-            zip(self.assets, result_dicts)
-        )
+        self.results = [BasicResult(asset_result_dict[0], asset_result_dict[1]) for asset_result_dict in zip(self.assets, result_dicts)]
 
     def remove_results(self):
         """

@@ -45,9 +45,9 @@ class FileSystemResultStore(ResultStore):
         try:
             make_parent_dirs_if_nonexist(result_file_path)
         except OSError as e:
-            print 'make_parent_dirs_if_nonexist {path} fails: {e}'.format(
+            print('make_parent_dirs_if_nonexist {path} fails: {e}'.format(
                 path=result_file_path,
-                e=str(e))
+                e=str(e)))
             pass
 
         self.save_result(result, result_file_path)

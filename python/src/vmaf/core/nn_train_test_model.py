@@ -256,7 +256,7 @@ class NeuralNetTrainTestModel(RawVideoTrainTestModelMixin,
 
     def _get_total_frames(self, xys):
         yss = xys['dis_y'] # yss
-        return np.sum(map(lambda ys:len(ys), yss))
+        return np.sum([len(ys) for ys in yss])
 
     def to_file(self, filename):
         """
@@ -358,8 +358,8 @@ class ToddNoiseClassifierTrainTestModel(NeuralNetTrainTestModel, ClassifierMixin
         num_train_data = int(num_data / 2) # do even split
         train_indices = indices[:num_train_data]
         validate_indices = indices[num_train_data:]
-        train_posindices = filter(lambda idx: labels[idx] == 1, train_indices)
-        train_negindices = filter(lambda idx: labels[idx] == 0, train_indices)
+        train_posindices = [idx for idx in train_indices if labels[idx] == 1]
+        train_negindices = [idx for idx in train_indices if labels[idx] == 0]
 
         input_image_batch, logits, y_, y_p, W_conv0, W_conv1, loss, train_step \
             = self.create_tf_variables(self.param_dict)
@@ -374,26 +374,26 @@ class ToddNoiseClassifierTrainTestModel(NeuralNetTrainTestModel, ClassifierMixin
         f1score_per_epoch = []
         loss_per_epoch = []
         for j in range(self.n_epochs):
-            print ""
+            print("")
 
-            print "******************** EPOCH %d / %d ********************" % (j, self.n_epochs)
+            print("******************** EPOCH %d / %d ********************" % (j, self.n_epochs))
 
             # train
             train_loss, train_score = self._evaluate_on_patches(
                 patches, labels, input_image_batch, loss,
                 sess, train_indices, y_, y_p, "train")
 
-            print ""
+            print("")
 
             # validate
             validate_loss, validate_score = self._evaluate_on_patches(
                 patches, labels, input_image_batch, loss,
                 sess, validate_indices, y_, y_p, "validate")
 
-            print ""
+            print("")
 
-            print("f1 train %g, f1 validate %g, loss train %g, loss validate %g"
-                  % (train_score, validate_score, train_loss, validate_loss))
+            print(("f1 train %g, f1 validate %g, loss train %g, loss validate %g"
+                  % (train_score, validate_score, train_loss, validate_loss)))
             f1score_per_epoch.append([train_score, validate_score])
             loss_per_epoch.append([train_loss, validate_loss])
 
@@ -401,7 +401,7 @@ class ToddNoiseClassifierTrainTestModel(NeuralNetTrainTestModel, ClassifierMixin
                 if saver is None:
                     saver = tf.train.Saver(max_to_keep=0)
                 outputfile = "%s/model_epoch_%d.ckpt" % (self.checkpoints_dir, j,)
-                print "Checkpointing -> %s" % (outputfile,)
+                print("Checkpointing -> %s" % (outputfile,))
                 saver.save(sess, outputfile)
 
             halfbatch = self.batch_size / 2
@@ -413,7 +413,7 @@ class ToddNoiseClassifierTrainTestModel(NeuralNetTrainTestModel, ClassifierMixin
             n_iterations = np.min((len(train_posindices)/halfbatch,
                                    len(train_negindices)/halfbatch))
 
-            for i in xrange(n_iterations):
+            for i in range(n_iterations):
                 # must sort, since h5py needs ordered indices
                 poslst = np.sort(train_posindices[i*(halfbatch):(i+1)*(halfbatch)]).tolist()
                 neglst = np.sort(train_negindices[i*(halfbatch):(i+1)*(halfbatch)]).tolist()
@@ -435,7 +435,7 @@ class ToddNoiseClassifierTrainTestModel(NeuralNetTrainTestModel, ClassifierMixin
             np.random.shuffle(train_posindices)
             np.random.shuffle(train_negindices)
 
-            print ""
+            print("")
 
         model = {
             'sess': sess,
@@ -457,8 +457,8 @@ class ToddNoiseClassifierTrainTestModel(NeuralNetTrainTestModel, ClassifierMixin
             sys.stdout.flush()
             curr_indices = indices[M * self.batch_size:
                            (M + 1) * self.batch_size].tolist()
-            patches = map(lambda idx: patches_in[idx], curr_indices)
-            labels_ = map(lambda idx: labels_in[idx], curr_indices)
+            patches = [patches_in[idx] for idx in curr_indices]
+            labels_ = [labels_in[idx] for idx in curr_indices]
             labels = as_one_hot(labels_)
             y_pred, loss = sess.run([y_p, loss_in],
                 feed_dict={input_image_batch: patches, y_: labels})

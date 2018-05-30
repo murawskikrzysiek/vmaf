@@ -85,7 +85,7 @@ def _plot_distribution_fit(ax, data, distribution_fcn, plot_type, tag, color, **
         assert False, "Unknown plot type: {}".format(plot_type)
     label = "{tag} {dis_name} fit {param}".format(
         tag=tag, dis_name=distribution_fcn.name,
-        param=', '.join(map(lambda p: "{:.4f}".format(p), params)))
+        param=', '.join(["{:.4f}".format(p) for p in params]))
 
     if ax:
         ax.plot(xs, ys, label=label, color=color)

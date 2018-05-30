@@ -54,31 +54,27 @@ class BasicResult(object):
 
     def get_ordered_list_scores_key(self):
         # e.g. ['VMAF_scores', 'VMAF_vif_scores']
-        list_scores_key = filter(lambda key: re.search(r"_scores$", key),
-                                 self.result_dict.keys())
+        list_scores_key = [key for key in list(self.result_dict.keys()) if re.search(r"_scores$", key)]
         list_scores_key = sorted(list_scores_key)
         return list_scores_key
 
     def get_ordered_list_score_key(self):
         # e.g. ['VMAF_score', 'VMAF_vif_score']
         list_scores_key = self.get_ordered_list_scores_key()
-        return map(lambda scores_key: scores_key[:-1], list_scores_key)
+        return [scores_key[:-1] for scores_key in list_scores_key]
 
     def _get_scores_str(self, unit_name='Frame'):
         list_scores_key = self.get_ordered_list_scores_key()
         list_score_key = self.get_ordered_list_score_key()
-        list_scores = map(lambda key: self.result_dict[key], list_scores_key)
+        list_scores = [self.result_dict[key] for key in list_scores_key]
         str_perframe = "\n".join(
-            map(
-                lambda (frame_num, scores): "{unit} {num}: ".format(
-                    unit=unit_name, num=frame_num) + (
-                ", ".join(
-                    map(
-                        lambda (score_key, score): "{score_key}:{score:.6f}".format(score_key=score_key, score=score),
-                        zip(list_score_key, scores))
-                )),
+            map(lambda frame_num, scores: "{unit} {num}: ".format(
+                unit=unit_name, num=frame_num) + (", ".join(map(
+                lambda score_key, score: "{score_key}:{score:.6f}".format(
+                    score_key=score_key, score=score), zip(list_score_key, scores))
+            )),
                 enumerate(zip(*list_scores))
-            )
+                )
         )
         str_perframe += '\n'
         return str_perframe
@@ -87,7 +83,7 @@ class BasicResult(object):
         list_score_key = self.get_ordered_list_score_key()
         str_aggregate = "Aggregate ({}): ".format(self.score_aggregate_method.__name__) + (", ".join(
             map(
-                lambda (score_key, score): "{score_key}:{score:.6f}".format(score_key=score_key, score=score),
+                lambda score_key, score: "{score_key}:{score:.6f}".format(score_key=score_key, score=score),
                 zip(
                     list_score_key, map(
                         lambda score_key: self[score_key],
@@ -194,9 +190,9 @@ class Result(BasicResult):
 
         list_scores_key = self.get_ordered_list_scores_key()
         list_score_key = self.get_ordered_list_score_key()
-        list_scores = map(lambda key: self.result_dict[key], list_scores_key)
-        list_aggregate_score = map(lambda key: self[key], list_score_key)
-        list_scores_reordered = zip(*list_scores)
+        list_scores = [self.result_dict[key] for key in list_scores_key]
+        list_aggregate_score = [self[key] for key in list_score_key]
+        list_scores_reordered = list(zip(*list_scores))
 
         def prettify(elem):
             rough_string = ElementTree.tostring(elem, 'utf-8')
@@ -263,9 +259,9 @@ class Result(BasicResult):
         """
         list_scores_key = self.get_ordered_list_scores_key()
         list_score_key = self.get_ordered_list_score_key()
-        list_scores = map(lambda key: self.result_dict[key], list_scores_key)
-        list_aggregate_score = map(lambda key: self[key], list_score_key)
-        list_scores_reordered = zip(*list_scores)
+        list_scores = [self.result_dict[key] for key in list_scores_key]
+        list_aggregate_score = [self[key] for key in list_score_key]
+        list_scores_reordered = list(zip(*list_scores))
 
         top = OrderedDict()
         top['executorId'] = self.executor_id
@@ -332,7 +328,7 @@ class Result(BasicResult):
         asset = self.asset
         executor_id = self.executor_id
         list_scores_key = self.get_ordered_list_scores_key()
-        list_scores = map(lambda key: self.result_dict[key], list_scores_key)
+        list_scores = [self.result_dict[key] for key in list_scores_key]
 
         rows = []
         for scores_key, scores in zip(list_scores_key, list_scores):
@@ -348,7 +344,7 @@ class Result(BasicResult):
             rows.append(row)
 
         # zip rows into a dict, and wrap with df
-        df = pd.DataFrame(dict(zip(self.DATAFRAME_COLUMNS, zip(*rows))))
+        df = pd.DataFrame(dict(list(zip(self.DATAFRAME_COLUMNS, list(zip(*rows))))))
 
         return df
 
@@ -394,7 +390,7 @@ class Result(BasicResult):
         assert len(df) == len(set(df['scores_key'].tolist()))
 
         # all scores should have equal length
-        assert len(set(map(lambda x:len(x), df['scores'].tolist()))) == 1
+        assert len(set([len(x) for x in df['scores'].tolist()])) == 1
 
 
 class RawResult(object):

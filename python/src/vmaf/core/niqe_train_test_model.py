@@ -61,8 +61,7 @@ class NiqeTrainTestModel(TrainTestModel, RegressorMixin):
 
         xs_2d = []
         for i_sample in range(num_samples):
-            xs_2d_ = np.vstack(map(
-                lambda feature_name: xys[feature_name][i_sample], feature_names)
+            xs_2d_ = np.vstack([xys[feature_name][i_sample] for feature_name in feature_names]
             ).T
             xs_2d.append(xs_2d_)
         xs_2d = np.vstack(xs_2d)
@@ -90,9 +89,7 @@ class NiqeTrainTestModel(TrainTestModel, RegressorMixin):
         # predict per sample
         ys_label_pred = []
         for i_sample in range(num_samples):
-            xs_2d_ = np.vstack(map(
-                lambda feature_name: xs[feature_name][i_sample],
-                self.feature_names)
+            xs_2d_ = np.vstack([xs[feature_name][i_sample] for feature_name in self.feature_names]
             ).T
 
             # no normalization for NIQE

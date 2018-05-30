@@ -22,7 +22,7 @@ class FeatureAssemblerTest(unittest.TestCase):
         self.assertTrue(MomentFeatureExtractor in fextractor_subclasses)
 
     def test_feature_assembler_whole_feature(self):
-        print 'test on feature assembler with whole feature...'
+        print('test on feature assembler with whole feature...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -65,7 +65,7 @@ class FeatureAssemblerTest(unittest.TestCase):
         self.assertAlmostEqual(results[1]['VMAF_feature_ansnr_score'], 31.271439270833337, places=4)
 
     def test_feature_assembler_selected_atom_feature(self):
-        print 'test on feature assembler with selected atom features...'
+        print('test on feature assembler with selected atom features...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,

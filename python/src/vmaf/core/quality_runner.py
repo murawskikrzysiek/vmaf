@@ -19,7 +19,7 @@ from vmaf.tools.misc import run_process
 __copyright__ = "Copyright 2016-2018, Netflix, Inc."
 __license__ = "Apache, Version 2.0"
 
-class QualityRunner(Executor):
+class QualityRunner(Executor, metaclass=ABCMeta):
     """
     QualityRunner takes in a list of assets, and run quality assessment on
     them, and return a list of corresponding results. A QualityRunner must
@@ -58,8 +58,6 @@ class QualityRunner(Executor):
         FeatureAssembler.
     For an example, follow VmafQualityRunner.
     """
-
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def _get_quality_scores(self, asset):
@@ -638,9 +636,7 @@ class MsSsimQualityRunner(QualityRunner):
         vmaf_fassembler = self._get_feature_assembler_instance(asset)
         vmaf_fassembler.remove_results()
 
-class VmafSingleFeatureQualityRunner(QualityRunner):
-
-    __metaclass__ = ABCMeta
+class VmafSingleFeatureQualityRunner(QualityRunner, metaclass=ABCMeta):
 
     VERSION = 'F{}-0'.format(VmafFeatureExtractor.VERSION)
 

@@ -28,15 +28,13 @@ class WorkdirEnabled(object):
     def workdir_root(self):
         return get_dir_without_last_slash(self.workdir)
 
-class TypeVersionEnabled(object):
+class TypeVersionEnabled(object, metaclass=ABCMeta):
     """
     Mandate a type name and a version string. Derived class (e.g. an Executor)
     has a unique string combining type and version. The string is useful in
     identifying a Result by which Executor it is generated (e.g. VMAF_V0.1,
     PSNR_V1.0, or VMAF_feature_V0.1).
     """
-
-    __metaclass__ = ABCMeta
 
     @property
     @abstractmethod

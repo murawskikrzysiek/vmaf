@@ -114,7 +114,7 @@ def get_normalized_string_from_dict(d):
     >>> get_normalized_string_from_dict({"max_buffer_sec": 5.0, "bitrate_kbps": 45, })
     'bitrate_kbps_45_max_buffer_sec_5.0'
     """
-    return '_'.join(map(lambda k: '{k}_{v}'.format(k=k,v=d[k]), sorted(d.keys())))
+    return '_'.join(['{k}_{v}'.format(k=k,v=d[k]) for k in sorted(d.keys())])
 
 def get_hashable_value_tuple_from_dict(d):
     """ Hashable tuple of values with sorted keys.
@@ -124,9 +124,7 @@ def get_hashable_value_tuple_from_dict(d):
     >>> get_hashable_value_tuple_from_dict({"max_buffer_sec": 5.0, "bitrate_kbps": 45, "resolutions": [(740, 480), (1920, 1080), ]})
     (45, 5.0, ((740, 480), (1920, 1080)))
     """
-    return tuple(map(
-        lambda k: tuple(d[k]) if isinstance(d[k], list) else d[k],
-        sorted(d.keys())))
+    return tuple([tuple(d[k]) if isinstance(d[k], list) else d[k] for k in sorted(d.keys())])
 
 def get_unique_str_from_recursive_dict(d):
     """ String representation with sorted keys and values for recursive dict.
@@ -141,10 +139,7 @@ def get_unique_str_from_recursive_dict(d):
 
     def to_ordered_dict_recursively(d):
         if isinstance(d, dict):
-            return OrderedDict(map(
-                lambda (k,v): (to_ordered_dict_recursively(k), to_ordered_dict_recursively(v)),
-                sorted(d.items())
-            ))
+            return OrderedDict([(to_ordered_dict_recursively(k_v[0]), to_ordered_dict_recursively(k_v[1])) for k_v in sorted(d.items())])
         else:
             return d
     return json.dumps(to_ordered_dict_recursively(d))
@@ -304,7 +299,7 @@ def parallel_map(func, list_args, processes=None):
         sleep(0.01) # check every x sec
 
     # finally, collect results
-    rets = map(lambda idx: return_dict[idx], range(len(list_args)))
+    rets = [return_dict[idx] for idx in range(len(list_args))]
 
     return rets
 
@@ -417,9 +412,9 @@ def slugify(value):
     and converts spaces to hyphens.
     """
     import unicodedata
-    value = unicodedata.normalize('NFKD', unicode(value)).encode('ascii', 'ignore')
-    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
-    value = unicode(re.sub('[-\s]+', '-', value))
+    value = unicodedata.normalize('NFKD', str(value)).encode('ascii', 'ignore')
+    value = str(re.sub('[^\w\s-]', '', value).strip().lower())
+    value = str(re.sub('[-\s]+', '-', value))
 
     return value
 
@@ -454,7 +449,7 @@ class Timer(object):
         self.tstart = time()
 
     def __exit__(self, type, value, traceback):
-        print 'Elapsed: %s' % (time() - self.tstart)
+        print('Elapsed: %s' % (time() - self.tstart))
 
 if __name__ == '__main__':
     import doctest

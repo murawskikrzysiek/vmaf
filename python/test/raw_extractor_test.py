@@ -16,7 +16,7 @@ from vmaf.core.raw_extractor import AssetExtractor, DisYUVRawVideoExtractor
 class RawExtractorTest(unittest.TestCase):
 
     def test_run_asset_extractor(self):
-        print 'test on running asset extractor...'
+        print('test on running asset extractor...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=1,
@@ -60,7 +60,7 @@ class DisYUVRawVideoExtractorTest(unittest.TestCase):
             os.remove(self.h5py_filepath)
 
     def test_run_dis_yuv_raw_video_extractor(self):
-        print 'test on running dis YUV raw video extractor...'
+        print('test on running dis YUV raw video extractor...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=1,
@@ -88,9 +88,9 @@ class DisYUVRawVideoExtractorTest(unittest.TestCase):
         results = self.fextractor.results
 
         self.assertAlmostEqual(np.mean(results[0]['dis_y']), 61.332006579182384, places=4)
-        self.assertAlmostEquals(np.mean(results[1]['dis_y']), 59.788567297525148, places=4)
+        self.assertAlmostEqual(np.mean(results[1]['dis_y']), 59.788567297525148, places=4)
         self.assertAlmostEqual(np.mean(results[0]['dis_u']), 115.23227407335962, places=4)
-        self.assertAlmostEquals(np.mean(results[1]['dis_u']), 114.49701717535437, places=4)
+        self.assertAlmostEqual(np.mean(results[1]['dis_u']), 114.49701717535437, places=4)
 
         with self.assertRaises(KeyError):
             np.mean(results[0]['dis_v'])
@@ -98,7 +98,7 @@ class DisYUVRawVideoExtractorTest(unittest.TestCase):
         DisYUVRawVideoExtractor.close_h5py_file(h5py_file)
 
     def test_run_dis_yuv_raw_video_extractor_parallel(self):
-        print 'test on running dis YUV raw video extractor...'
+        print('test on running dis YUV raw video extractor...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=1,
@@ -136,7 +136,7 @@ class ParallelDisYRawVideoExtractorTest(unittest.TestCase):
             os.remove(self.h5py_filepath)
 
     def test_run_parallel_dis_y_fextractor(self):
-        print 'test on running dis YUV raw video extractor in parallel (disabled)...'
+        print('test on running dis YUV raw video extractor in parallel (disabled)...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=1,
@@ -168,9 +168,9 @@ class ParallelDisYRawVideoExtractorTest(unittest.TestCase):
         results = fextractor.results
 
         self.assertAlmostEqual(np.mean(results[0]['dis_y']), 61.332006579182384, places=4)
-        self.assertAlmostEquals(np.mean(results[1]['dis_y']), 59.788567297525148, places=4)
+        self.assertAlmostEqual(np.mean(results[1]['dis_y']), 59.788567297525148, places=4)
         self.assertAlmostEqual(np.mean(results[0]['dis_u']), 115.23227407335962, places=4)
-        self.assertAlmostEquals(np.mean(results[1]['dis_u']), 114.49701717535437, places=4)
+        self.assertAlmostEqual(np.mean(results[1]['dis_u']), 114.49701717535437, places=4)
 
         with self.assertRaises(KeyError):
             np.mean(results[0]['dis_v'])

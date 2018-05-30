@@ -20,10 +20,10 @@ OUT_FMTS = ['text (default)', 'xml', 'json']
 POOL_METHODS = ['mean', 'harmonic_mean', 'min', 'median', 'perc5', 'perc10', 'perc20']
 
 def print_usage():
-    print "usage: " + os.path.basename(sys.argv[0]) \
-          + " fmt width height ref_path dis_path [--model model_path] [--out-fmt out_fmt] [--phone-model]\n"
-    print "fmt:\n\t" + "\n\t".join(FMTS) + "\n"
-    print "out_fmt:\n\t" + "\n\t".join(OUT_FMTS) + "\n"
+    print("usage: " + os.path.basename(sys.argv[0]) \
+          + " fmt width height ref_path dis_path [--model model_path] [--out-fmt out_fmt] [--phone-model]\n")
+    print("fmt:\n\t" + "\n\t".join(FMTS) + "\n")
+    print("out_fmt:\n\t" + "\n\t".join(OUT_FMTS) + "\n")
 
 def main():
     if len(sys.argv) < 6:
@@ -41,7 +41,7 @@ def main():
         return 2
 
     if width < 0 or height < 0:
-        print "width and height must be non-negative, but are {w} and {h}".format(w=width, h=height)
+        print("width and height must be non-negative, but are {w} and {h}".format(w=width, h=height))
         print_usage()
         return 2
 
@@ -62,7 +62,7 @@ def main():
     pool_method = get_cmd_option(sys.argv, 6, len(sys.argv), '--pool')
     if not (pool_method is None
             or pool_method in POOL_METHODS):
-        print '--pool can only have option among {}'.format(', '.join(POOL_METHODS))
+        print('--pool can only have option among {}'.format(', '.join(POOL_METHODS)))
         return 2
 
     show_local_explanation = cmd_option_exists(sys.argv, 6, len(sys.argv), '--local-explain')
@@ -125,11 +125,11 @@ def main():
 
     # output
     if out_fmt == 'xml':
-        print result.to_xml()
+        print(result.to_xml())
     elif out_fmt == 'json':
-        print result.to_json()
+        print(result.to_json())
     else: # None or 'text'
-        print str(result)
+        print(str(result))
 
     # local explanation
     if show_local_explanation:

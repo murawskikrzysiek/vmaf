@@ -248,9 +248,7 @@ class ClassifierMixin(object):
         else:
             assert False, 'Unknow type: {} for get_objective_score().'.format(type)
 
-class TrainTestModel(TypeVersionEnabled):
-
-    __metaclass__ = ABCMeta
+class TrainTestModel(TypeVersionEnabled, metaclass=ABCMeta):
 
     @classmethod
     @abstractmethod
@@ -342,7 +340,7 @@ class TrainTestModel(TypeVersionEnabled):
     @mus.setter
     def mus(self, value):
         # forcing float, to be used by PicklingTools and read in C++
-        self.model_dict['mus'] = map(lambda x: float(x), list(value))
+        self.model_dict['mus'] = [float(x) for x in list(value)]
 
     @property
     def sds(self):
@@ -351,7 +349,7 @@ class TrainTestModel(TypeVersionEnabled):
     @sds.setter
     def sds(self, value):
         # forcing float, to be used by PicklingTools and read in C++
-        self.model_dict['sds'] = map(lambda x: float(x), list(value))
+        self.model_dict['sds'] = [float(x) for x in list(value)]
 
     @property
     def slopes(self):
@@ -360,7 +358,7 @@ class TrainTestModel(TypeVersionEnabled):
     @slopes.setter
     def slopes(self, value):
         # forcing float, to be used by PicklingTools and read in C++
-        self.model_dict['slopes'] = map(lambda x: float(x), list(value))
+        self.model_dict['slopes'] = [float(x) for x in list(value)]
 
     @property
     def intercepts(self):
@@ -369,7 +367,7 @@ class TrainTestModel(TypeVersionEnabled):
     @intercepts.setter
     def intercepts(self, value):
         # forcing float, to be used by PicklingTools and read in C++
-        self.model_dict['intercepts'] = map(lambda x: float(x), list(value))
+        self.model_dict['intercepts'] = [float(x) for x in list(value)]
 
     @property
     def model(self):
@@ -617,10 +615,10 @@ class TrainTestModel(TypeVersionEnabled):
         xs = {}
         for name in feature_names:
             if indexs is not None:
-                _results = map(lambda i:results[i], indexs)
+                _results = [results[i] for i in indexs]
             else:
                 _results = results
-            xs[name] = map(lambda result: result[name], _results)
+            xs[name] = [result[name] for result in _results]
         return xs
 
     @classmethod
@@ -655,13 +653,13 @@ class TrainTestModel(TypeVersionEnabled):
         """
         ys = {}
         if indexs is not None:
-            _results = map(lambda i:results[i], indexs)
+            _results = [results[i] for i in indexs]
         else:
             _results = results
         ys['label'] = \
-            np.array(map(lambda result: result.asset.groundtruth, _results))
+            np.array([result.asset.groundtruth for result in _results])
         ys['content_id'] = \
-            np.array(map(lambda result: result.asset.content_id, _results))
+            np.array([result.asset.content_id for result in _results])
         return ys
 
     @classmethod
@@ -1067,7 +1065,7 @@ class BootstrapMixin(object):
         for i_model in range(1, num_models):
             np.random.seed(i_model) # seed is i_model
             # random sample with replacement:
-            indices = np.random.choice(range(sample_size), size=sample_size, replace=True)
+            indices = np.random.choice(list(range(sample_size)), size=sample_size, replace=True)
             xys_2d_ = xys_2d[indices, :]
             model_ = self._train(self.param_dict, xys_2d_)
             models.append(model_)
@@ -1228,7 +1226,7 @@ class ResidueBootstrapMixin(BootstrapMixin):
         for i_model in range(1, num_models):
             np.random.seed(i_model) # seed is i_model
             # random sample with replacement:
-            indices = np.random.choice(range(sample_size), size=sample_size, replace=True)
+            indices = np.random.choice(list(range(sample_size)), size=sample_size, replace=True)
             residue_ys_resampled = residue_ys[indices]
             ys_resampled = residue_ys_resampled + ys_pred
             xys_2d_ = np.array(np.hstack((np.matrix(ys_resampled).T, xs_2d)))

@@ -78,10 +78,10 @@ class MomentNorefFeatureExtractor(NorefExecutorMixin, FeatureExtractor):
         var_scores_key = cls.get_scores_key('var')
         first_scores_key = cls.get_scores_key('1st')
         second_scores_key = cls.get_scores_key('2nd')
-        get_var = lambda (m1, m2): m2 - m1 * m1
+        get_var = lambda m1_m2: m1_m2[1] - m1_m2[0] * m1_m2[0]
         result.result_dict[var_scores_key] = \
-            map(get_var, zip(result.result_dict[first_scores_key],
-                             result.result_dict[second_scores_key]))
+            list(map(get_var, list(zip(result.result_dict[first_scores_key],
+                             result.result_dict[second_scores_key]))))
 
         # validate
         for feature in cls.DERIVED_ATOM_FEATURES:

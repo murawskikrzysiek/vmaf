@@ -8,7 +8,7 @@ VMAF Development Kit (VDK) is a software package that contains the VMAF algorith
 as well as a set of tools that allows a user to train and test a custom VMAF model.
 """
 
-from __future__ import print_function
+
 
 import os
 import sys

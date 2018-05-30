@@ -245,17 +245,17 @@ def run_test_on_dataset(test_dataset, runner_class, ax,
             assert False
 
     # plot
-    groundtruths = map(lambda asset: asset.groundtruth, test_assets)
-    predictions = map(lambda result: result[runner_class.get_score_key()], results)
+    groundtruths = [asset.groundtruth for asset in test_assets]
+    predictions = [result[runner_class.get_score_key()] for result in results]
     raw_grountruths = None if test_raw_assets is None else \
-        map(lambda asset: asset.raw_groundtruth, test_raw_assets)
+        [asset.raw_groundtruth for asset in test_raw_assets]
     groundtruths_std = None if test_assets is None else \
-        map(lambda asset: asset.groundtruth_std, test_assets)
+        [asset.groundtruth_std for asset in test_assets]
     try:
-        predictions_bagging = map(lambda result: result[runner_class.get_bagging_score_key()], results)
-        predictions_stddev = map(lambda result: result[runner_class.get_stddev_score_key()], results)
-        predictions_ci95_low = map(lambda result: result[runner_class.get_ci95_low_score_key()], results)
-        predictions_ci95_high = map(lambda result: result[runner_class.get_ci95_high_score_key()], results)
+        predictions_bagging = [result[runner_class.get_bagging_score_key()] for result in results]
+        predictions_stddev = [result[runner_class.get_stddev_score_key()] for result in results]
+        predictions_ci95_low = [result[runner_class.get_ci95_low_score_key()] for result in results]
+        predictions_ci95_high = [result[runner_class.get_ci95_high_score_key()] for result in results]
         stats = model_type.get_stats(groundtruths, predictions,
                                      ys_label_raw=raw_grountruths,
                                      ys_label_pred_bagging=predictions_bagging,
@@ -268,16 +268,16 @@ def run_test_on_dataset(test_dataset, runner_class, ax,
                                      ys_label_raw=raw_grountruths,
                                      ys_label_stddev=groundtruths_std)
 
-    print 'Stats on testing data: {}'.format(model_type.format_stats_for_print(stats))
+    print('Stats on testing data: {}'.format(model_type.format_stats_for_print(stats)))
 
     if ax is not None:
-        content_ids = map(lambda asset: asset.content_id, test_assets)
+        content_ids = [asset.content_id for asset in test_assets]
 
         if 'point_label' in kwargs:
             if kwargs['point_label'] == 'asset_id':
-                point_labels = map(lambda asset: asset.asset_id, test_assets)
+                point_labels = [asset.asset_id for asset in test_assets]
             elif kwargs['point_label'] == 'dis_path':
-                point_labels = map(lambda asset: get_file_name_without_extension(asset.dis_path), test_assets)
+                point_labels = [get_file_name_without_extension(asset.dis_path) for asset in test_assets]
             else:
                 raise AssertionError("Unknown point_label {}".format(kwargs['point_label']))
         else:
@@ -296,11 +296,11 @@ def run_test_on_dataset(test_dataset, runner_class, ax,
     return test_assets, results
 
 def print_matplotlib_warning():
-    print "Warning: cannot import matplotlib, no picture displayed. " \
+    print("Warning: cannot import matplotlib, no picture displayed. " \
           "If you are on Mac OS and have installed matplotlib, you " \
           "possibly need to run: \nsudo pip uninstall python-dateutil \n" \
           "sudo pip install python-dateutil==2.2 \n" \
-          "Refer to: http://stackoverflow.com/questions/27630114/matplotlib-issue-on-os-x-importerror-cannot-import-name-thread"
+          "Refer to: http://stackoverflow.com/questions/27630114/matplotlib-issue-on-os-x-importerror-cannot-import-name-thread")
 
 
 def train_test_vmaf_on_dataset(train_dataset, test_dataset,
@@ -368,7 +368,7 @@ def train_test_vmaf_on_dataset(train_dataset, test_dataset,
     train_ys_pred = VmafQualityRunner.predict_with_model(model, train_xs, **kwargs)['ys_pred']
 
     raw_groundtruths = None if train_raw_assets is None else \
-        map(lambda asset: asset.raw_groundtruth, train_raw_assets)
+        [asset.raw_groundtruth for asset in train_raw_assets]
 
     train_stats = model.get_stats(train_ys['label'], train_ys_pred, ys_label_raw=raw_groundtruths)
 
@@ -376,14 +376,14 @@ def train_test_vmaf_on_dataset(train_dataset, test_dataset,
     if logger:
         logger.info(log)
     else:
-        print log
+        print(log)
 
     # save model
     if output_model_filepath is not None:
         model.to_file(output_model_filepath)
 
     if train_ax is not None:
-        train_content_ids = map(lambda asset: asset.content_id, train_assets)
+        train_content_ids = [asset.content_id for asset in train_assets]
         model_class.plot_scatter(train_ax, train_stats, content_ids=train_content_ids)
 
         train_ax.set_xlabel('True Score')
@@ -441,7 +441,7 @@ def train_test_vmaf_on_dataset(train_dataset, test_dataset,
         test_ys_pred = VmafQualityRunner.predict_with_model(model, test_xs, **kwargs)['ys_pred']
 
         raw_groundtruths = None if test_raw_assets is None else \
-            map(lambda asset: asset.raw_groundtruth, test_raw_assets)
+            [asset.raw_groundtruth for asset in test_raw_assets]
 
         test_stats = model.get_stats(test_ys['label'], test_ys_pred, ys_label_raw=raw_groundtruths)
 
@@ -449,10 +449,10 @@ def train_test_vmaf_on_dataset(train_dataset, test_dataset,
         if logger:
             logger.info(log)
         else:
-            print log
+            print(log)
 
         if test_ax is not None:
-            test_content_ids = map(lambda asset: asset.content_id, test_assets)
+            test_content_ids = [asset.content_id for asset in test_assets]
             model_class.plot_scatter(test_ax, test_stats, content_ids=test_content_ids)
             test_ax.set_xlabel('True Score')
             test_ax.set_ylabel("Predicted Score")
@@ -468,7 +468,7 @@ def train_test_vmaf_on_dataset(train_dataset, test_dataset,
 
 def construct_kfold_list(assets, contentid_groups):
     # construct cross validation kfold input list
-    content_ids = map(lambda asset: asset.content_id, assets)
+    content_ids = [asset.content_id for asset in assets]
     kfold = []
     for curr_content_group in contentid_groups:
         curr_indices = indices(content_ids, lambda x: x in curr_content_group)
@@ -510,10 +510,10 @@ def cv_on_dataset(dataset, feature_param, model_param, ax, result_store,
         logger=logger,
     )
 
-    print 'Feature parameters: {}'.format(feature_param.feature_dict)
-    print 'Model type: {}'.format(model_param.model_type)
-    print 'Model parameters: {}'.format(model_param.model_param_dict)
-    print 'Stats: {}'.format(model_class.format_stats_for_print(cv_output['aggr_stats']))
+    print('Feature parameters: {}'.format(feature_param.feature_dict))
+    print('Model type: {}'.format(model_param.model_type))
+    print('Model parameters: {}'.format(model_param.model_param_dict))
+    print('Stats: {}'.format(model_class.format_stats_for_print(cv_output['aggr_stats'])))
 
     if ax is not None:
         model_class.plot_scatter(ax, cv_output['aggr_stats'], cv_output['contentids'])
@@ -606,17 +606,17 @@ def explain_model_on_dataset(model, test_assets_selected_indexs,
                              test_dataset_filepath):
 
     def print_assets(test_assets):
-        print '\n'.join(map(
-            lambda (i, asset): "Asset {i}: {name}".format(
+        print('\n'.join(map(
+            lambda i, asset: "Asset {i}: {name}".format(
                 i=i, name=get_file_name_without_extension(asset.dis_path)),
             enumerate(test_assets)
-        ))
+        )))
 
     test_dataset = import_python_file(test_dataset_filepath)
     test_assets = read_dataset(test_dataset)
     print_assets(test_assets)
-    print "Assets selected for local explanation: {}".format(
-        test_assets_selected_indexs)
+    print("Assets selected for local explanation: {}".format(
+        test_assets_selected_indexs))
     result_store = FileSystemResultStore()
     test_assets = [test_assets[i] for i in test_assets_selected_indexs]
     test_fassembler = FeatureAssembler(

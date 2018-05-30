@@ -24,7 +24,7 @@ class FeatureExtractorTest(unittest.TestCase):
                       ref_path="dir/refvideo.yuv", dis_path="dir/disvideo.yuv",
                       asset_dict={'width': 720, 'height': 480})
         fextractor = VmafFeatureExtractor([asset], None)
-        self.assertEquals(fextractor.executor_id, "VMAF_feature_V0.2.4b")
+        self.assertEqual(fextractor.executor_id, "VMAF_feature_V0.2.4b")
 
     def test_get_log_file_path(self):
         import hashlib
@@ -40,7 +40,7 @@ class FeatureExtractorTest(unittest.TestCase):
         self.assertTrue(re.match(r"^my_workdir_root/[a-zA-Z0-9-]+/VMAF_feature_V0.2.4b_{}$".format(h), log_file_path))
 
     def test_run_vmaf_fextractor(self):
-        print 'test on running VMAF feature extractor...'
+        print('test on running VMAF feature extractor...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -117,7 +117,7 @@ class FeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[1]['VMAF_feature_adm3_score'], 1.0, places=4)
 
     def test_run_vmaf_fextractor_with_result_store(self):
-        print 'test on running VMAF feature extractor with result store...'
+        print('test on running VMAF feature extractor with result store...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -140,14 +140,14 @@ class FeatureExtractorTest(unittest.TestCase):
             result_store=result_store
         )
 
-        print '    running for the first time with fresh calculation...'
+        print('    running for the first time with fresh calculation...')
         self.fextractor.run()
         result0, result1 = self.fextractor.results
 
         self.assertTrue(os.path.exists(result_store._get_result_file_path(result0)))
         self.assertTrue(os.path.exists(result_store._get_result_file_path(result1)))
 
-        print '    running for the second time with stored results...'
+        print('    running for the second time with stored results...')
         self.fextractor.run()
         results = self.fextractor.results
 
@@ -202,7 +202,7 @@ class FeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[1]['VMAF_feature_adm3_score'], 1.0, places=4)
 
     def test_run_moment_fextractor(self):
-        print 'test on running Moment feature extractor...'
+        print('test on running Moment feature extractor...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -241,7 +241,7 @@ class FeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[1]['Moment_feature_disvar_score'], 1121.519917231203, places=4)
 
     def test_run_psnr_fextractor(self):
-        print 'test on running PSNR feature extractor...'
+        print('test on running PSNR feature extractor...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -269,7 +269,7 @@ class FeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[1]['PSNR_feature_psnr_score'], 60.0, places=4)
 
     def test_run_ssim_fextractor(self):
-        print 'test on running SSIM feature extractor...'
+        print('test on running SSIM feature extractor...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -304,7 +304,7 @@ class FeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[1]['SSIM_feature_ssim_s_score'], 1.0, places=4)
 
     def test_run_ms_ssim_fextractor(self):
-        print 'test on running MS-SSIM feature extractor...'
+        print('test on running MS-SSIM feature extractor...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -363,7 +363,7 @@ class FeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[1]['MS_SSIM_feature_ms_ssim_s_scale4_score'], 1., places=4)
 
     def test_run_vmaf_fextractor_checkerboard(self):
-        print 'test on running VMAF feature extractor on checkerboard...'
+        print('test on running VMAF feature extractor on checkerboard...')
 
         ref_path = VmafConfig.test_resource_path("yuv", "checkerboard_1920_1080_10_3_0_0.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "checkerboard_1920_1080_10_3_10_0.yuv")
@@ -423,7 +423,7 @@ class FeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[2]['VMAF_feature_motion2_score'], 12.554836666666667, places=4)
 
     def test_run_vmaf_fextractor_flat(self):
-        print 'test on running VMAF feature extractor on flat pattern...'
+        print('test on running VMAF feature extractor on flat pattern...')
 
         ref_path = VmafConfig.test_resource_path("yuv", "flat_1920_1080_0.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "flat_1920_1080_10.yuv")
@@ -472,7 +472,7 @@ class ParallelFeatureExtractorTest(unittest.TestCase):
             pass
 
     def test_run_parallel_vmaf_fextractor(self):
-        print 'test on running VMAF feature extractor in parallel...'
+        print('test on running VMAF feature extractor in parallel...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -546,8 +546,8 @@ class ParallelFeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[2]['VMAF_feature_vif_num_score'], 712650.023478, places=0)
 
     def test_run_parallel_vamf_fextractor_with_result_store(self):
-        print 'test on running VMAF feature extractor with result store ' \
-              'in parallel...'
+        print('test on running VMAF feature extractor with result store ' \
+              'in parallel...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -564,7 +564,7 @@ class ParallelFeatureExtractorTest(unittest.TestCase):
 
         result_store = FileSystemResultStore(logger=None)
 
-        print '    running for the first time with fresh calculation...'
+        print('    running for the first time with fresh calculation...')
         self.fextractor = VmafFeatureExtractor(
             [asset, asset_original],
             None, fifo_mode=True,
@@ -578,7 +578,7 @@ class ParallelFeatureExtractorTest(unittest.TestCase):
         self.assertTrue(os.path.exists(result_store._get_result_file_path(result0)))
         self.assertTrue(os.path.exists(result_store._get_result_file_path(result1)))
 
-        print '    running for the second time with stored results...'
+        print('    running for the second time with stored results...')
         self.fextractor = VmafFeatureExtractor(
             [asset, asset_original, asset],
             None, fifo_mode=True,
@@ -638,7 +638,7 @@ class ParallelFeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[2]['VMAF_feature_vif_score'], 0.4460930625, places=4)
 
     def test_run_parallel_moment_fextractor(self):
-        print 'test on running Moment feature extractor in parallel...'
+        print('test on running Moment feature extractor in parallel...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -678,7 +678,7 @@ class ParallelFeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[2]['Moment_feature_ref1st_score'], 59.788567297525134, places=4)
 
     def test_run_parallel_ssim_fextractor(self):
-        print 'test on running SSIM feature extractor in parallel...'
+        print('test on running SSIM feature extractor in parallel...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -714,7 +714,7 @@ class ParallelFeatureExtractorTest(unittest.TestCase):
         self.assertAlmostEqual(results[2]['SSIM_feature_ssim_score'], 0.86322654166666657, places=4)
 
     def test_run_parallel_ms_ssim_fextractor(self):
-        print 'test on running MS-SSIM feature extractor in parallel...'
+        print('test on running MS-SSIM feature extractor in parallel...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,

@@ -75,7 +75,7 @@ class DisYUVRawVideoExtractor(H5pyMixin, RawExtractor):
             return 'yuv'
         else:
             channels = self.optional_dict['channels']
-            assert isinstance(channels, basestring)
+            assert isinstance(channels, str)
             channels = set(channels.lower())
             assert channels.issubset(set('yuv'))
             return ''.join(channels)

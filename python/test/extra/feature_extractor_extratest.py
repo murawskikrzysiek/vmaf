@@ -17,7 +17,7 @@ class ParallelMatlabFeatureExtractorTestNew(unittest.TestCase):
         pass
 
     def test_run_strred_fextractor(self):
-        print 'test on running STRRED feature extractor...'
+        print('test on running STRRED feature extractor...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -49,7 +49,7 @@ class ParallelMatlabFeatureExtractorTestNew(unittest.TestCase):
         self.assertAlmostEqual(results[1]['STRRED_feature_strred_score'], 0.0, places=4)
 
     def test_run_strred_fextractor_blackframes(self):
-        print 'test on running STRRED feature extractor on flat frames...'
+        print('test on running STRRED feature extractor on flat frames...')
         ref_path = VmafConfig.test_resource_path("yuv", "flat_1920_1080_0.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "flat_1920_1080_10.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,
@@ -73,7 +73,7 @@ class ParallelMatlabFeatureExtractorTestNew(unittest.TestCase):
             result_store=result_store
         )
 
-        print '    running for the first time with fresh calculation...'
+        print('    running for the first time with fresh calculation...')
         self.fextractor.run(parallelize=True)
 
         result0, result1 = self.fextractor.results
@@ -81,7 +81,7 @@ class ParallelMatlabFeatureExtractorTestNew(unittest.TestCase):
         self.assertTrue(os.path.exists(result_store._get_result_file_path(result0)))
         self.assertTrue(os.path.exists(result_store._get_result_file_path(result1)))
 
-        print '    running for the second time with stored results...'
+        print('    running for the second time with stored results...')
         self.fextractor.run(parallelize=True)
         results = self.fextractor.results
 

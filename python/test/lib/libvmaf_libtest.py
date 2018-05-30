@@ -26,7 +26,7 @@ class QualityRunnerTest(unittest.TestCase):
         self.result_store = FileSystemResultStore()
 
     def test_run_testlib_runner(self):
-        print 'test on running TESTLIB runner...'
+        print('test on running TESTLIB runner...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,

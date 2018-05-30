@@ -60,7 +60,7 @@ class ModelCrossValidation(object):
         :return: output
         """
 
-        if isinstance(kfold, (int, long)):
+        if isinstance(kfold, int):
             kfold_type = 'int'
         elif isinstance(kfold, (list, tuple)):
             kfold_type = 'list'
@@ -77,7 +77,7 @@ class ModelCrossValidation(object):
             for fold in range(num_fold):
                 index_start = fold * fold_size
                 index_end = min((fold+1)*fold_size, dataframe_size)
-                kfold.append(range(index_start, index_end))
+                kfold.append(list(range(index_start, index_end)))
 
         assert len(kfold) >= 2, 'kfold list must have length >= 2 for k-fold ' \
                                 'cross validation.'
@@ -152,7 +152,7 @@ class ModelCrossValidation(object):
         :return: output
         """
 
-        if isinstance(kfold, (int, long)):
+        if isinstance(kfold, int):
             kfold_type = 'int'
         elif isinstance(kfold, (list, tuple)):
             kfold_type = 'list'
@@ -169,7 +169,7 @@ class ModelCrossValidation(object):
             for fold in range(num_fold):
                 index_start = fold * fold_size
                 index_end = min((fold+1)*fold_size, dataframe_size)
-                kfold.append(range(index_start, index_end))
+                kfold.append(list(range(index_start, index_end)))
 
         assert len(kfold) >= 3, 'kfold list must have length >= 2 for nested ' \
                                 'k-fold cross validation.'
@@ -262,7 +262,7 @@ class ModelCrossValidation(object):
         assert isinstance(model_param_search_range, dict)
         # for grid search, model_param_search_range's values must all be lists
         # or tuples
-        for v in model_param_search_range.itervalues():
+        for v in model_param_search_range.values():
             assert isinstance(v, (list, tuple))
 
     @classmethod
@@ -270,7 +270,7 @@ class ModelCrossValidation(object):
         assert isinstance(model_param_search_range, dict)
         # for random search, model_param_search_range's values must either be
         # lists/tuples, or dictionary containing 'low' and 'high' bounds.
-        for v in model_param_search_range.itervalues():
+        for v in model_param_search_range.values():
             assert (isinstance(v, (list, tuple))
                     or
                     (isinstance(v, dict) and 'low' in v
@@ -280,19 +280,19 @@ class ModelCrossValidation(object):
     @classmethod
     def print_output(cls, output):
         if 'stats' in output:
-            print 'Stats: {}'.format(cls.format_stats(output['stats']))
+            print('Stats: {}'.format(cls.format_stats(output['stats'])))
         if 'aggr_stats' in output:
-            print 'Aggregated stats: {}'.format(cls.format_stats(output['aggr_stats']))
+            print('Aggregated stats: {}'.format(cls.format_stats(output['aggr_stats'])))
         if 'top_model_param' in output:
-            print 'Top model param ({ratio:.3f}): {modelparam}'.format(
+            print('Top model param ({ratio:.3f}): {modelparam}'.format(
                 ratio=output['top_ratio'],
-                modelparam=output['top_model_param'])
+                modelparam=output['top_model_param']))
         if 'statss' in output and 'model_params' in output:
             for fold, (stats, model_param) in \
                     enumerate(zip(output['statss'], output['model_params'])):
-                print 'Fold {fold}: {model_param}, {stats}'.format(
+                print('Fold {fold}: {model_param}, {stats}'.format(
                     fold=fold, model_param=model_param,
-                    stats=cls.format_stats(stats))
+                    stats=cls.format_stats(stats)))
 
     @staticmethod
     def format_stats(stats):

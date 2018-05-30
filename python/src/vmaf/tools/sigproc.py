@@ -78,7 +78,7 @@ def midrank(x):
     # Z=[Z Z(end)+1];
     # N=length(x);
     # T=zeros(1,N);
-    J, Z = zip(*sorted(enumerate(x), key=lambda x:x[1]))
+    J, Z = list(zip(*sorted(enumerate(x), key=lambda x:x[1])))
     J = list(J)
     Z = list(Z)
     Z.append(Z[-1]+1)

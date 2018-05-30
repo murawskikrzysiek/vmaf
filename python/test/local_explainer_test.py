@@ -87,7 +87,7 @@ class LocalExplainerTest(unittest.TestCase):
                          )
 
     def test_explain_vmaf_results(self):
-        print 'test on running VMAF runner with local explainer...'
+        print('test on running VMAF runner with local explainer...')
         ref_path = VmafConfig.test_resource_path("yuv", "src01_hrc00_576x324.yuv")
         dis_path = VmafConfig.test_resource_path("yuv", "src01_hrc01_576x324.yuv")
         asset = Asset(dataset="test", content_id=0, asset_id=0,

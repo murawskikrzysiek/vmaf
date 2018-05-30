@@ -1,6 +1,6 @@
 # TODO: dependency on libsvm/svmutil needs to be properly done, this is a temporary workaround wrapper
 
-from __future__ import absolute_import
+
 
 import sys
 from vmaf.config import VmafConfig
@@ -20,5 +20,5 @@ try:
     from svmutil import *           # noqa
 
 except ImportError as e:
-    print "Can't import svmutil from %s: %s" % (libsvm_path, e)
+    print("Can't import svmutil from %s: %s" % (libsvm_path, e))
     sys.exit(1)

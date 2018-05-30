@@ -15,7 +15,7 @@ from vmaf.config import VmafExternalConfig
 __copyright__ = "Copyright 2016-2018, Netflix, Inc."
 __license__ = "Apache, Version 2.0"
 
-class Executor(TypeVersionEnabled):
+class Executor(TypeVersionEnabled, metaclass=ABCMeta):
     """
     An Executor takes in a list of Assets, and run computations on them, and
     return a list of corresponding Results. An Executor must specify a unique
@@ -26,8 +26,6 @@ class Executor(TypeVersionEnabled):
     provides a number of shared housekeeping functions, including reusing
     Results, creating FIFO pipes, cleaning up log files/Results, etc.
     """
-
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def _generate_result(self, asset):
@@ -122,7 +120,7 @@ class Executor(TypeVersionEnabled):
 
             self.results = parallel_map(_run, list_args)
         else:
-            self.results = map(self._run_on_asset, self.assets)
+            self.results = list(map(self._run_on_asset, self.assets))
 
     def remove_results(self):
         """
@@ -377,7 +375,7 @@ class Executor(TypeVersionEnabled):
     def _get_log_file_path(self, asset):
         return "{workdir}/{executor_id}_{str}".format(
             workdir=asset.workdir, executor_id=self.executor_id,
-            str=hashlib.sha1(str(asset)).hexdigest())
+            str=hashlib.sha1(str(asset).encode("utf-8")).hexdigest())
 
     # ===== workfile =====
 
@@ -626,7 +624,7 @@ def run_executors_in_parallel(executor_class,
     if parallelize:
         executors = parallel_map(run_executor, list_args, processes=None)
     else:
-        executors = map(run_executor, list_args)
+        executors = list(map(run_executor, list_args))
 
     # aggregate results
     results = [executor.results[0] for executor in executors]

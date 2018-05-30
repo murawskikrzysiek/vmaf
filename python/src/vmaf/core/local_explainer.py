@@ -154,7 +154,7 @@ class LocalExplainer(object):
         # asserts
         N = cls.assert_explanations(exps, assets, ys, ys_pred)
 
-        print "Features: {}".format(exps['feature_names'])
+        print("Features: {}".format(exps['feature_names']))
 
         for n in range(N):
             weights = exps['feature_weights'][n]
@@ -164,18 +164,18 @@ class LocalExplainer(object):
             y = ys['label'][n] if ys is not None else None
             y_pred = ys_pred[n] if ys_pred is not None else None
 
-            print "{ref}".format(
+            print("{ref}".format(
                 ref=get_file_name_without_extension(asset.ref_path) if
-                asset is not None else "Asset {}".format(n))
+                asset is not None else "Asset {}".format(n)))
             if asset is not None:
-                print "\tDistorted: {dis}".format(
-                    dis=get_file_name_without_extension(asset.dis_path))
+                print("\tDistorted: {dis}".format(
+                    dis=get_file_name_without_extension(asset.dis_path)))
             if y is not None:
-                print "\tground truth: {y:.3f}".format(y=y)
+                print("\tground truth: {y:.3f}".format(y=y))
             if y_pred is not None:
-                print "\tpredicted: {y_pred:.3f}".format(y_pred=y_pred)
-            print "\tfeature value: {}".format(features)
-            print "\tfeature weight: {}".format(weights)
+                print("\tpredicted: {y_pred:.3f}".format(y_pred=y_pred))
+            print("\tfeature value: {}".format(features))
+            print("\tfeature weight: {}".format(weights))
 
     @classmethod
     def plot_explanations(cls, exps, assets=None, ys=None, ys_pred=None):

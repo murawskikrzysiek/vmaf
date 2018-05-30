@@ -20,9 +20,9 @@ POOL_METHODS = ['mean', 'harmonic_mean', 'min', 'median', 'perc5', 'perc10', 'pe
 SUBJECTIVE_MODELS = ['DMOS (default)', 'DMOS_MLE', 'MLE', 'MOS', 'SR_DMOS', 'SR_MOS', 'ZS_SR_DMOS', 'ZS_SR_MOS']
 
 def print_usage():
-    print "usage: " + os.path.basename(sys.argv[0]) + \
-        " train_dataset_filepath feature_param_filepath model_param_filepath output_model_filepath [--subj-model subjective_model] [--cache-result] [--parallelize]\n"
-    print "subjective_model:\n\t" + "\n\t".join(SUBJECTIVE_MODELS) + "\n"
+    print("usage: " + os.path.basename(sys.argv[0]) + \
+        " train_dataset_filepath feature_param_filepath model_param_filepath output_model_filepath [--subj-model subjective_model] [--cache-result] [--parallelize]\n")
+    print("subjective_model:\n\t" + "\n\t".join(SUBJECTIVE_MODELS) + "\n")
 
 def main():
 
@@ -44,7 +44,7 @@ def main():
         feature_param = import_python_file(feature_param_filepath)
         model_param = import_python_file(model_param_filepath)
     except Exception as e:
-        print "Error: " + str(e)
+        print("Error: " + str(e))
         return 1
 
     cache_result = cmd_option_exists(sys.argv, 3, len(sys.argv), '--cache-result')
@@ -54,7 +54,7 @@ def main():
     pool_method = get_cmd_option(sys.argv, 3, len(sys.argv), '--pool')
     if not (pool_method is None
             or pool_method in POOL_METHODS):
-        print '--pool can only have option among {}'.format(', '.join(POOL_METHODS))
+        print('--pool can only have option among {}'.format(', '.join(POOL_METHODS)))
         return 2
 
     subj_model = get_cmd_option(sys.argv, 3, len(sys.argv), '--subj-model')
@@ -65,7 +65,7 @@ def main():
         else:
             subj_model_class = None
     except Exception as e:
-        print "Error: " + str(e)
+        print("Error: " + str(e))
         return 1
 
     if cache_result:

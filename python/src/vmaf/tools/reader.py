@@ -55,7 +55,7 @@ class YuvReader(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         try:
             return self.next_y_u_v()
         except EOFError:

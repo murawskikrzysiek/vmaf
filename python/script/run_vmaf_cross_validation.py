@@ -43,4 +43,4 @@ if __name__ == '__main__':
 
     DisplayConfig.show()
 
-    print 'Done.'
+    print('Done.')
